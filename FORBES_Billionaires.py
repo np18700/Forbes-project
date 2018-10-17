@@ -1,7 +1,13 @@
 
 # coding: utf-8
 
-# In[1]:
+# # World's Top Billionaires 2018
+
+# <p> 2,212 billionaires, collectively worth $9.1 trillion.</p>
+
+# <p> capitalism’s global conquest continues as entrepreneurs around the globe mint fortunes in everything from cryptocurrencies to telecom to bridal dresses. Forbes has pinned down a record 2,212 billionaires from 72 countries and territories including the first ever from Hungary and Zimbabwe. This elite group is worth \$9.1 trillion, up 18% since last year. Their average net worth is a record \$4.1 billion. Americans lead the way with a record 587 billionaires, followed by mainland China with 373. Centi-billionaire Jeff Bezos secures the list’s top spot for the first time, becoming the only person to appear in the Forbes ranks with a 12-figure fortune. Bezos’s fortune leapt more than \$39 billion, the list’s biggest one-year gain ever. </p>
+
+# In[29]:
 
 
 import numpy as np
@@ -9,7 +15,7 @@ import pandas as pd
 import pandas.util
 
 
-# In[2]:
+# In[30]:
 
 
 forbes = pd.read_csv('reviews_static.csv', names = ['Rank', 'Name', 'Net Worth', 'Age', 'Source', 'Country'])
@@ -19,7 +25,7 @@ forbes_realtime = pd.read_csv('reviews_realtime.csv', names = ['Rank', 'Name', '
 forbes_women = pd.read_csv('reviews_static_women.csv', names = ['Rank', 'Name', 'Net Worth', 'Age', 'Source', 'Country'])
 
 
-# In[3]:
+# In[31]:
 
 
 #creating data frame for current net worth
@@ -36,7 +42,7 @@ forbes_data['Net Worth_y'] = forbes_data['Net Worth_y'].fillna(0)
 forbes_data['Change'] = forbes_data['Net Worth_y']- forbes_data['Net Worth_x']
 
 
-# In[4]:
+# In[32]:
 
 
 # changing float into integar
@@ -44,7 +50,7 @@ forbes_data['Age'] = list(map(lambda x: int(x), forbes_data['Age']))
 forbes_data['Rank'] = list(map(lambda x: int(x), forbes_data['Rank']))
 
 
-# In[5]:
+# In[33]:
 
 
 #creating women data frame, so i can merge that into main data frame to create Gender column
@@ -55,27 +61,27 @@ forbes_data['Gender'] = forbes_data['Name'].isin(women)
 forbes_data['Gender'].replace([True,False],['F','M'],inplace = True)
 
 
-# In[6]:
+# In[34]:
 
 
 #checking final data frame
 forbes_data.head(10)
 
 
-# In[7]:
+# In[35]:
 
 
 #Checking Null values (No NA values)
 np.sum(forbes_data.isnull())
 
 
-# In[8]:
+# In[36]:
 
 
 get_ipython().run_line_magic('matplotlib', 'inline')
 
 
-# In[9]:
+# In[37]:
 
 
 #import matplotlib for plotting graph
@@ -83,7 +89,7 @@ from matplotlib import pyplot as plt
 plt.style.use('ggplot')
 
 
-# In[10]:
+# In[38]:
 
 
 #GRAPH 1
@@ -98,7 +104,7 @@ plt.title('Number of billionaires by country', fontsize = 22)
 # plt.savefig("figure1.png")
 
 
-# In[11]:
+# In[39]:
 
 
 #GRAPH 2.1
@@ -110,7 +116,7 @@ plt.title('Number of Male & Female', fontsize = 22)
 # plt.savefig("figure2.png")
 
 
-# In[12]:
+# In[40]:
 
 
 #GRAPH 2.2
@@ -122,7 +128,7 @@ plt.ylabel('Gender', fontsize = 20)
 # plt.savefig("figure3.png")
 
 
-# In[14]:
+# In[41]:
 
 
 #GRAPH 3
@@ -135,7 +141,7 @@ plt.title('Bar plot for popular source of Income ', fontsize=20)
 # plt.savefig("figure3.png")
 
 
-# In[15]:
+# In[42]:
 
 
 #GRAPH 4
@@ -147,7 +153,7 @@ plt.title('Histogram of Age', fontsize=20)
 # plt.savefig("figure4.png")
 
 
-# In[18]:
+# In[43]:
 
 
 #GRAPH 5
@@ -166,7 +172,7 @@ plt.title('RICHEST PERSON FROM EACH COUNTRY', fontsize=20)
 # plt.savefig("figure5.png")
 
 
-# In[17]:
+# In[44]:
 
 
 #GRAPH 6
@@ -176,4 +182,22 @@ plt.xlabel('NAME OF PERSON (TOP 11) Net Worth_x = 2018 Net Worth  |  Net Worth_y
 plt.ylabel('REAL TIME NET WORTH (IN BILLIONS)',fontsize=20)
 plt.title('CHANGE IN NET WORTH', fontsize=22)
 # plt.savefig("figure6.png")
+
+
+# In[45]:
+
+
+#GRAPH 7
+# plotting graph for total net worth for each country
+total_money = forbes_data.groupby('Country')[['Net Worth_x']].agg('sum').reset_index()
+
+#taking log of total net_worth
+total_money['Net Worth_x'] = np.log2(total_money['Net Worth_x'])
+
+#plotting graph
+total_money.head(10).sort_values(by = 'Net Worth_x', ascending = False).plot.bar(x = 'Country', y = 'Net Worth_x',figsize = (18,9),xlim = 20)
+plt.xlabel('Group by Country (Top 10)', fontsize = 20)
+plt.ylabel('log value of total net worth', fontsize = 20)
+plt.title('Bar Plot: Total money by country', fontsize=22)
+# plt.savefig("figure7.png")
 
