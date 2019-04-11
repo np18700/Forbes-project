@@ -4,3 +4,6 @@ There are 2212 people from 71 countries collectively worth $9.1 trillion. The ma
 
 
 ### Nilesh Patel
+
+### Check My Blog:
+https://nycdatascience.com/blog/student-works/the-billionaires-2018/
